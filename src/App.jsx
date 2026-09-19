@@ -340,8 +340,8 @@ export default function App() {
 
           <div className="hero__bottom">
             <p className="hero__lead">
-              Agência de automação para empresas. A gente entra no problema da operação e constrói o sistema que tira
-              retrabalho do caminho.
+              A gente entende os problemas da sua operação e constrói sistemas que eliminam tarefas manuais, reduzem
+              retrabalho e tornam seus processos mais eficientes.
             </p>
             <div className="hero__actions">
               <a className="btn btn--fill" href="#contato" data-magnetic>
