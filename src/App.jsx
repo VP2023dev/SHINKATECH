@@ -118,7 +118,7 @@ export default function App() {
             SHINK<span>A</span>
           </span>
         </a>
-        <p className="nav__meta">進化 · SÃO PAULO</p>
+        <p className="nav__meta">進化</p>
         <button className="nav__toggle" type="button" aria-label="Abrir menu" data-magnetic>
           <span />
           <span />
@@ -153,7 +153,6 @@ export default function App() {
           </ul>
           <div className="menu__foot">
             <p>進化</p>
-            <p>SÃO PAULO · BRASIL</p>
           </div>
         </div>
       </nav>
@@ -170,7 +169,6 @@ export default function App() {
               <span className="eyebrow__dot" />
               進化
             </p>
-            <p className="hero__avail">SÃO PAULO · BRASIL</p>
           </div>
 
           <h1 className="hero__title">
@@ -343,7 +341,6 @@ export default function App() {
         </p>
         <div className="footer__row">
           <p>進化</p>
-          <p>SÃO PAULO · BRASIL</p>
           <p>© 2026 SHINKA</p>
         </div>
       </footer>

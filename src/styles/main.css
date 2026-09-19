@@ -21,6 +21,15 @@
 
 html {
   color-scheme: dark;
+  overflow-x: clip;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 html,
@@ -30,7 +39,11 @@ body {
   font-family: Outfit, "Noto Sans JP", sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  overflow-x: hidden;
+}
+
+body,
+#root {
+  overflow: visible;
 }
 
 html.lenis,
@@ -455,12 +468,6 @@ body.menu-open .nav__toggle span:last-child {
     transform: rotate(45deg) scale(1.15);
     box-shadow: 0 0 0 8px rgba(227, 6, 19, 0);
   }
-}
-
-.hero__avail {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  color: var(--muted);
 }
 
 .hero__glow {
