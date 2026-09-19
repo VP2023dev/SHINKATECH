@@ -46,7 +46,7 @@ function ServicesCarousel() {
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [instant, setInstant] = useState(false);
-  const drag = useRef({ active: false, start: 0, x: 0 });
+  const drag = useRef({ armed: false, active: false, start: 0, startY: 0, x: 0 });
 
   useEffect(() => {
     if (dragging) return;
@@ -93,21 +93,34 @@ function ServicesCarousel() {
   }
 
   function onPointerDown(event) {
-    drag.current = { active: true, start: event.clientX, x: 0 };
-    setDragging(true);
-    event.currentTarget.setPointerCapture(event.pointerId);
+    drag.current = { armed: true, active: false, start: event.clientX, startY: event.clientY, x: 0 };
   }
 
   function onPointerMove(event) {
-    if (!drag.current.active) return;
-    drag.current.x = event.clientX - drag.current.start;
-    setDragX(drag.current.x);
+    if (!drag.current.armed && !drag.current.active) return;
+    const dx = event.clientX - drag.current.start;
+    const dy = event.clientY - drag.current.startY;
+
+    if (!drag.current.active) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (Math.abs(dy) >= Math.abs(dx)) {
+        drag.current.armed = false;
+        return;
+      }
+      drag.current.active = true;
+      setDragging(true);
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+
+    drag.current.x = dx;
+    setDragX(dx);
   }
 
   function onPointerUp() {
-    if (!drag.current.active) return;
+    const wasDrag = drag.current.active;
     const delta = drag.current.x;
-    drag.current = { active: false, start: 0, x: 0 };
+    drag.current = { armed: false, active: false, start: 0, startY: 0, x: 0 };
+    if (!wasDrag) return;
     setDragging(false);
     setDragX(0);
     if (delta < -60) next();
@@ -142,7 +155,6 @@ function ServicesCarousel() {
 
       <div
         className="carousel__viewport"
-        data-lenis-prevent
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}

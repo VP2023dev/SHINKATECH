@@ -163,6 +163,7 @@ function initCardTilt() {
   if (isTouch || reduceMotion) return;
 
   document.querySelectorAll(".card").forEach((card) => {
+    if (card.closest(".carousel")) return;
     card.addEventListener("mousemove", (event) => {
       const rect = card.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width - 0.5;
