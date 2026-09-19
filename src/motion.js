@@ -539,8 +539,18 @@ function initMarquee() {
   };
 }
 
+function resetToTop(lenis) {
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  lenis?.scrollTo(0, { immediate: true, force: true });
+}
+
 export function startMotion() {
   if (isTouch) document.body.classList.add("is-touch");
+  resetToTop();
 
   const stopCursor = initPointer();
   initMagnetic();
@@ -556,10 +566,14 @@ export function startMotion() {
 
   if (!reduceMotion) {
     lenisApi = initLenis();
+    resetToTop(lenisApi.lenis);
     lenisApi.lenis.stop();
     initScrollFx();
     initHorizontal();
-    initLoader(() => lenisApi.lenis.start());
+    initLoader(() => {
+      resetToTop(lenisApi.lenis);
+      lenisApi.lenis.start();
+    });
   } else {
     const loader = document.querySelector(".loader");
     if (loader) loader.style.display = "none";

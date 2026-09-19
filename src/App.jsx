@@ -182,7 +182,7 @@ export default function App() {
           </div>
 
           <div className="hero__bottom">
-            <p className="hero__lead lede">
+            <p className="hero__lead">
               Agência de automação para empresas. A gente entra no problema da operação e constrói o sistema que tira
               retrabalho do caminho.
             </p>
@@ -222,9 +222,7 @@ export default function App() {
           <div className="manifesto__head">
             <p className="eyebrow">
               <span className="eyebrow__dot" />
-              <span className="eyebrow__idx">01</span>
-              <span className="eyebrow__line" />
-              <span>A agência</span>
+              01 — A AGÊNCIA
             </p>
             <p className="kanji-label">
               <span>進</span>
@@ -232,13 +230,13 @@ export default function App() {
             </p>
           </div>
 
-          <h2 className="display manifesto__title">
+          <h2 className="manifesto__title">
             A tecnologia que não evolui
             <em>morre em silêncio.</em>
           </h2>
 
           <div className="manifesto__grid">
-            <p className="manifesto__lead lede">
+            <p className="manifesto__lead">
               SHINKA vem do ideograma japonês <strong>進化</strong> — evolução. Somos uma agência de automação para
               empresas. Entramos no problema da operação e construímos o sistema que tira retrabalho do caminho.
             </p>
@@ -261,16 +259,15 @@ export default function App() {
 
         <section className="services" id="servicos">
           <div className="services__sticky">
-            <div className="section-head services__head">
+            <div className="services__head">
               <p className="eyebrow">
                 <span className="eyebrow__dot" />
-                <span className="eyebrow__idx">02</span>
-                <span className="eyebrow__line" />
-                <span>O que fazemos</span>
+                02 — O QUE FAZEMOS
               </p>
-              <h2 className="display">
+              <h2>
                 O que a gente
-                <em>automatiza.</em>
+                <br />
+                automatiza.
               </h2>
             </div>
 
@@ -292,15 +289,14 @@ export default function App() {
         </section>
 
         <section className="method" id="metodo">
-          <div className="section-head method__head">
+          <div className="method__head">
             <p className="eyebrow">
               <span className="eyebrow__dot" />
-              <span className="eyebrow__idx">03</span>
-              <span className="eyebrow__line" />
-              <span>Método</span>
+              03 — MÉTODO
             </p>
-            <h2 className="display">
+            <h2>
               Quatro atos.
+              <br />
               <em>Zero improviso.</em>
             </h2>
           </div>
@@ -324,15 +320,14 @@ export default function App() {
           </p>
           <p className="eyebrow">
             <span className="eyebrow__dot" />
-            <span className="eyebrow__idx">04</span>
-            <span className="eyebrow__line" />
-            <span>Próximo passo</span>
+            04 — PRÓXIMO PASSO
           </p>
-          <h2 className="display cta__title">
+          <h2 className="cta__title">
             Conta o problema.
-            <em>A gente automatiza.</em>
+            <br />
+            A gente automatiza.
           </h2>
-          <p className="cta__lead lede">
+          <p className="cta__lead">
             Escreve o que trava a operação. A gente responde com um recorte honesto: o que dá para automatizar agora e o
             caminho.
           </p>
