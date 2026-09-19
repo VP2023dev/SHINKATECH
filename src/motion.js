@@ -402,46 +402,17 @@ function initFooterBreak(chars) {
   mark.addEventListener("mouseleave", reset);
 }
 
-function initHorizontal() {
+function initServices() {
   const section = document.querySelector(".services");
-  const track = document.querySelector("[data-horizontal]");
-  if (!section || !track || innerWidth <= 980) return;
-
-  const distance = () => Math.max(0, track.scrollWidth - innerWidth + 96);
+  if (!section) return;
 
   gsap.from(".card", {
-    y: 80,
+    y: 64,
     opacity: 0,
     stagger: 0.08,
     duration: 1,
     ease: "expo.out",
-    scrollTrigger: { trigger: section, start: "top 70%" },
-  });
-
-  const cards = gsap.utils.toArray(".card");
-
-  gsap.to(track, {
-    x: () => -distance(),
-    ease: "none",
-    scrollTrigger: {
-      trigger: section,
-      start: "top top",
-      end: () => `+=${distance()}`,
-      scrub: 1,
-      pin: true,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-      onUpdate() {
-        cards.forEach((card) => {
-          const rect = card.getBoundingClientRect();
-          const dist = Math.abs(rect.left + rect.width / 2 - innerWidth / 2);
-          const t = 1 - Math.min(1, dist / (innerWidth * 0.55));
-          if (!card.matches(":hover")) {
-            gsap.set(card, { scale: 0.96 + t * 0.04, opacity: 1 });
-          }
-        });
-      },
-    },
+    scrollTrigger: { trigger: section, start: "top 72%" },
   });
 }
 
@@ -569,7 +540,7 @@ export function startMotion() {
     resetToTop(lenisApi.lenis);
     lenisApi.lenis.stop();
     initScrollFx();
-    initHorizontal();
+    initServices();
     initLoader(() => {
       resetToTop(lenisApi.lenis);
       lenisApi.lenis.start();

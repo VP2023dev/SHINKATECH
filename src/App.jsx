@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { startMotion } from "./motion";
 
 const MARQUEE = ["AUTOMAÇÃO", "PROCESSOS", "SISTEMAS", "INTEGRAÇÃO", "EVOLUÇÃO"];
@@ -38,6 +38,151 @@ const METHOD = [
 ];
 
 const WHATSAPP = "5517974007400";
+
+function ServicesCarousel() {
+  const total = SERVICES.length;
+  const slides = [...SERVICES, ...SERVICES];
+  const [index, setIndex] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [instant, setInstant] = useState(false);
+  const drag = useRef({ active: false, start: 0, x: 0 });
+
+  useEffect(() => {
+    if (dragging) return;
+
+    if (index >= total) {
+      const jump = window.setTimeout(() => {
+        setInstant(true);
+        setIndex(0);
+      }, 750);
+      return () => window.clearTimeout(jump);
+    }
+
+    const play = window.setTimeout(() => {
+      setIndex((current) => current + 1);
+    }, 4000);
+    return () => window.clearTimeout(play);
+  }, [index, dragging, total]);
+
+  useEffect(() => {
+    if (!instant) return;
+    const frame = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setInstant(false));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [instant]);
+
+  function next() {
+    setIndex((current) => (current >= total ? current : current + 1));
+  }
+
+  function prev() {
+    if (index === 0) {
+      setInstant(true);
+      setIndex(total);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          setInstant(false);
+          setIndex(total - 1);
+        });
+      });
+      return;
+    }
+    setIndex((current) => current - 1);
+  }
+
+  function onPointerDown(event) {
+    drag.current = { active: true, start: event.clientX, x: 0 };
+    setDragging(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function onPointerMove(event) {
+    if (!drag.current.active) return;
+    drag.current.x = event.clientX - drag.current.start;
+    setDragX(drag.current.x);
+  }
+
+  function onPointerUp() {
+    if (!drag.current.active) return;
+    const delta = drag.current.x;
+    drag.current = { active: false, start: 0, x: 0 };
+    setDragging(false);
+    setDragX(0);
+    if (delta < -60) next();
+    else if (delta > 60) prev();
+  }
+
+  const active = index % total;
+
+  return (
+    <div className="carousel">
+      <div className="carousel__bar">
+        <div className="services__head">
+          <p className="eyebrow">
+            <span className="eyebrow__dot" />
+            02 — O QUE FAZEMOS
+          </p>
+          <h2>
+            O que a gente
+            <br />
+            automatiza.
+          </h2>
+        </div>
+        <div className="carousel__nav">
+          <button type="button" aria-label="Card anterior" onClick={prev}>
+            <span />
+          </button>
+          <button type="button" aria-label="Próximo card" onClick={next}>
+            <span />
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="carousel__viewport"
+        data-lenis-prevent
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        <div
+          className={`services__track${dragging || instant ? " is-dragging" : ""}`}
+          style={{
+            transform: `translate3d(calc(${-index} * (var(--card-w) + var(--card-gap)) + ${dragX}px), 0, 0)`,
+          }}
+        >
+          {slides.map((item, slideIndex) => (
+            <article className="card" key={`${item.num}-${slideIndex}`}>
+              <span className="card__num">{item.num}</span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+              <ul>
+                {item.tags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="carousel__dots">
+        {SERVICES.map((item, i) => (
+          <button
+            key={item.num}
+            type="button"
+            aria-label={`Ir para ${item.title}`}
+            className={i === active ? "is-on" : ""}
+            onClick={() => setIndex(i)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function ContactForm() {
   const [sent, setSent] = useState(false);
@@ -258,34 +403,7 @@ export default function App() {
         </section>
 
         <section className="services" id="servicos">
-          <div className="services__sticky">
-            <div className="services__head">
-              <p className="eyebrow">
-                <span className="eyebrow__dot" />
-                02 — O QUE FAZEMOS
-              </p>
-              <h2>
-                O que a gente
-                <br />
-                automatiza.
-              </h2>
-            </div>
-
-            <div className="services__track" data-horizontal>
-              {SERVICES.map((item) => (
-                <article className="card" key={item.num}>
-                  <span className="card__num">{item.num}</span>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                  <ul>
-                    {item.tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </div>
+          <ServicesCarousel />
         </section>
 
         <section className="method" id="metodo">
@@ -341,6 +459,31 @@ export default function App() {
         </p>
         <div className="footer__row">
           <p>進化</p>
+          <div className="footer__social">
+            <a
+              href="https://www.instagram.com/shinkatechh/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram @shinkatechh"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/shinka-techh"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn @shinkatechh"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" />
+                <path d="M8.2 10.2v6.3M8.2 7.6v.1M11.4 16.5v-3.7c0-1.3.8-2.1 1.9-2.1s1.8.7 1.8 2.1v3.7" />
+              </svg>
+            </a>
+          </div>
           <p>© 2026 SHINKA</p>
         </div>
       </footer>

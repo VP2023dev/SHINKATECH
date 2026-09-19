@@ -563,7 +563,7 @@ body.menu-open .nav__toggle span:last-child {
 
 .hero__lead {
   max-width: 420px;
-  font-size: 17px;
+  font-size: 20px;
   color: #b8b8b4;
 }
 
@@ -791,7 +791,7 @@ body.menu-open .nav__toggle span:last-child {
 }
 
 .manifesto__lead {
-  font-size: 22px;
+  font-size: 26px;
   line-height: 1.5;
   max-width: 34ch;
   color: #c8c8c4;
@@ -820,25 +820,81 @@ body.menu-open .nav__toggle span:last-child {
 
 .manifesto__focus p {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 17px;
   max-width: 36ch;
 }
 
 .services {
+  --card-w: min(420px, 78vw);
+  --card-gap: 24px;
   background: var(--paper-2);
   color: var(--white);
   overflow: hidden;
+  padding: 140px 0 80px;
 }
 
-.services__sticky {
-  height: 100vh;
+.carousel__bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 0 48px;
+  margin-bottom: 40px;
+}
+
+.carousel__nav {
+  display: flex;
+  gap: 10px;
+  flex: none;
+}
+
+.carousel__nav button {
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  display: grid;
+  place-items: center;
+  transition: border-color 0.35s var(--ease), background 0.35s var(--ease);
+}
+
+.carousel__nav button:hover {
+  border-color: var(--red);
+  background: rgba(227, 6, 19, 0.12);
+}
+
+.carousel__nav button span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-top: 1.5px solid var(--white);
+  border-right: 1.5px solid var(--white);
+}
+
+.carousel__nav button:first-child span {
+  rotate: -135deg;
+  translate: 2px 0;
+}
+
+.carousel__nav button:last-child span {
+  rotate: 45deg;
+  translate: -2px 0;
+}
+
+.carousel__viewport {
   overflow: hidden;
-  padding: 120px 0 60px;
+  padding: 8px 48px 8px;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.carousel__viewport:active {
+  cursor: grabbing;
 }
 
 .services__head {
-  padding: 0 48px;
-  margin-bottom: 36px;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 .services__head h2 {
@@ -847,15 +903,38 @@ body.menu-open .nav__toggle span:last-child {
 
 .services__track {
   display: flex;
-  gap: 24px;
-  padding: 0 48px;
+  gap: var(--card-gap);
   width: max-content;
   will-change: transform;
+  transition: transform 0.75s var(--ease);
+}
+
+.services__track.is-dragging {
+  transition: none;
+}
+
+.carousel__dots {
+  display: flex;
+  gap: 10px;
+  padding: 28px 48px 0;
+}
+
+.carousel__dots button {
+  width: 28px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: width 0.4s var(--ease), background 0.4s var(--ease);
+}
+
+.carousel__dots button.is-on {
+  width: 48px;
+  background: var(--red);
 }
 
 .card {
   position: relative;
-  width: min(420px, 78vw);
+  flex: 0 0 var(--card-w);
+  width: var(--card-w);
   min-height: 460px;
   padding: 36px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -902,7 +981,7 @@ body.menu-open .nav__toggle span:last-child {
 
 .card p {
   color: #b7b7b4;
-  font-size: 16px;
+  font-size: 19px;
   max-width: 32ch;
 }
 
@@ -987,7 +1066,7 @@ body.menu-open .nav__toggle span:last-child {
 .method__list p {
   color: var(--muted);
   max-width: 46ch;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .cta {
@@ -1016,7 +1095,7 @@ body.menu-open .nav__toggle span:last-child {
 .cta__lead {
   max-width: 42ch;
   color: #b3b3b0;
-  font-size: 18px;
+  font-size: 21px;
   margin-bottom: 48px;
 }
 
@@ -1125,6 +1204,7 @@ body.menu-open .nav__toggle span:last-child {
 .footer__row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
   flex-wrap: wrap;
   border-top: 1px solid var(--line-strong);
@@ -1132,6 +1212,35 @@ body.menu-open .nav__toggle span:last-child {
   font-size: 12px;
   letter-spacing: 0.18em;
   color: var(--muted);
+}
+
+.footer__social {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer__social a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--muted);
+  transition: color 0.35s var(--ease);
+}
+
+.footer__social a:hover {
+  color: var(--red);
+}
+
+.footer__social svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .split-line {
@@ -1152,9 +1261,7 @@ body.menu-open .nav__toggle span:last-child {
   .method,
   .cta,
   .footer,
-  .menu__inner,
-  .services__head,
-  .services__track {
+  .menu__inner {
     padding-left: 22px;
     padding-right: 22px;
   }
@@ -1201,23 +1308,25 @@ body.menu-open .nav__toggle span:last-child {
   }
 
   .services {
+    --card-w: min(420px, calc(100vw - 64px));
     height: auto;
+    padding-top: 96px;
+    padding-bottom: 72px;
   }
 
-  .services__sticky {
-    position: relative;
-    height: auto;
-    padding: 96px 0;
+  .carousel__bar,
+  .carousel__viewport,
+  .carousel__dots {
+    padding-left: 22px;
+    padding-right: 22px;
   }
 
-  .services__track {
-    width: 100%;
+  .carousel__bar {
     flex-direction: column;
-    padding-bottom: 0;
+    align-items: flex-start;
   }
 
   .card {
-    width: 100%;
     min-height: auto;
   }
 
