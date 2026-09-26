@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { startMotion } from "./motion";
+import WorksSection from "./components/WorksSection.jsx";
 
 const MARQUEE = ["AUTOMAÇÃO", "PROCESSOS", "SISTEMAS", "INTEGRAÇÃO", "EVOLUÇÃO"];
 
@@ -298,12 +299,17 @@ export default function App() {
               </a>
             </li>
             <li>
-              <a href="#metodo" data-index="03">
+              <a href="#projetos" data-index="03">
+                Projetos
+              </a>
+            </li>
+            <li>
+              <a href="#metodo" data-index="04">
                 Método
               </a>
             </li>
             <li>
-              <a href="#contato" data-index="04">
+              <a href="#contato" data-index="05">
                 Contato
               </a>
             </li>
@@ -418,11 +424,13 @@ export default function App() {
           <ServicesCarousel />
         </section>
 
+        <WorksSection number="03" />
+
         <section className="method" id="metodo">
           <div className="method__head">
             <p className="eyebrow">
               <span className="eyebrow__dot" />
-              03 — MÉTODO
+              04 — MÉTODO
             </p>
             <h2>
               Quatro atos.
@@ -450,7 +458,7 @@ export default function App() {
           </p>
           <p className="eyebrow">
             <span className="eyebrow__dot" />
-            04 — PRÓXIMO PASSO
+            05 — PRÓXIMO PASSO
           </p>
           <h2 className="cta__title">
             Conta o problema.

@@ -300,7 +300,7 @@ function initScrollFx() {
     scrollTrigger: { scrub: 0.25 },
   });
 
-  gsap.utils.toArray(".manifesto__title, .method__head h2, .cta__title, .services__head h2").forEach((title) => {
+  gsap.utils.toArray(".manifesto__title, .method__head h2, .cta__title, .services__head h2, .works__head h2").forEach((title) => {
     const split = new SplitType(title, { types: "lines, words" });
     gsap.from(split.words, {
       yPercent: 120,
@@ -513,15 +513,24 @@ function initMarquee() {
 
 function resetToTop(lenis) {
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
   lenis?.scrollTo(0, { immediate: true, force: true });
 }
 
+function findTarget(hash) {
+  if (!hash || hash === "#") return null;
+  try {
+    return document.querySelector(hash);
+  } catch {
+    return null;
+  }
+}
+
 export function startMotion() {
   if (isTouch) document.body.classList.add("is-touch");
+  const initialTarget = findTarget(location.hash);
   resetToTop();
 
   const stopCursor = initPointer();
@@ -545,11 +554,15 @@ export function startMotion() {
     initLoader(() => {
       resetToTop(lenisApi.lenis);
       lenisApi.lenis.start();
+      if (initialTarget) {
+        window.setTimeout(() => lenisApi.lenis.scrollTo(initialTarget, { offset: -20, duration: 1.6 }), 350);
+      }
     });
   } else {
     const loader = document.querySelector(".loader");
     if (loader) loader.style.display = "none";
     revealPage();
+    initialTarget?.scrollIntoView();
   }
 
   return () => {
@@ -562,6 +575,68 @@ export function startMotion() {
     window.removeEventListener("resize", onResize);
     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     document.body.classList.remove("menu-open", "is-touch");
+    document.body.style.overflow = "";
+  };
+}
+
+let pageLenis = null;
+
+export function getLenis() {
+  return pageLenis;
+}
+
+export function startPageMotion() {
+  if (isTouch) document.body.classList.add("is-touch");
+
+  const stopCursor = initPointer();
+  initMagnetic();
+  const stopNav = initNav();
+  let lenisApi;
+
+  if (reduceMotion) {
+    gsap.set(".nav, [data-intro]", { opacity: 1 });
+  } else {
+    lenisApi = initLenis();
+    pageLenis = lenisApi.lenis;
+
+    gsap.to(".progress__bar", {
+      width: "100%",
+      ease: "none",
+      scrollTrigger: { scrub: 0.25 },
+    });
+
+    const title = new SplitType("[data-split]", { types: "chars" });
+    gsap.set(title.chars, { yPercent: 120, opacity: 0, rotateX: 50 });
+
+    gsap
+      .timeline({ defaults: { ease: "expo.out" } })
+      .to(".nav", { opacity: 1, duration: 0.8 })
+      .to("[data-intro]", { opacity: 1, duration: 0.01 }, "<")
+      .from("[data-intro]", { y: 36, duration: 1, stagger: 0.08 }, "<")
+      .to(title.chars, { yPercent: 0, opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.05 }, "-=0.9");
+
+    gsap.utils.toArray("[data-reveal]").forEach((el) => {
+      gsap.from(el, {
+        y: 56,
+        opacity: 0,
+        duration: 1.05,
+        ease: "expo.out",
+        scrollTrigger: { trigger: el, start: "top 88%" },
+      });
+    });
+  }
+
+  const onResize = () => ScrollTrigger.refresh();
+  window.addEventListener("resize", onResize);
+
+  return () => {
+    stopCursor?.();
+    stopNav?.();
+    lenisApi?.destroy();
+    pageLenis = null;
+    window.removeEventListener("resize", onResize);
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    document.body.classList.remove("menu-open", "is-touch", "case-open");
     document.body.style.overflow = "";
   };
 }
